@@ -1,13 +1,102 @@
-[gd_scene load_steps=2 format=3 uid="uid://o0ce628w54m0"]
+[gd_scene load_steps=7 format=3 uid="uid://o0ce628w54m0"]
 
 [ext_resource type="Script" path="res://level.gd" id="1_7h7l2"]
 
-[node name="Level" type="Node2D"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_62wyc"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_mcjvc"]
+sky_material = SubResource("ProceduralSkyMaterial_62wyc")
+
+[sub_resource type="Environment" id="Environment_aptin"]
+background_mode = 2
+sky = SubResource("Sky_mcjvc")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_qjl3s"]
+size = Vector2(10, 10)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_81hdx"]
+points = PackedVector3Array(5.07738, 0.079334, 5.07738, -5.07738, -0.079334, -5.07738, -5.07738, 0.079334, -5.07738, 5.07738, -0.079334, -5.07738, -5.07738, -0.079334, 5.07738, -5.07738, 0.079334, 5.07738, 5.07738, 0.079334, -5.07738, 5.07738, -0.079334, 5.07738)
+
+[node name="Level" type="Node3D"]
 script = ExtResource("1_7h7l2")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_aptin")
 
 [node name="Players" type="Node" parent="."]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://player.tscn")
+_spawnable_scenes = PackedStringArray("res://player.tscn", "res://player2.tscn")
 spawn_path = NodePath("../Players")
 spawn_limit = 4
+
+[node name="MultiplayerSpawner2" type="MultiplayerSpawner" parent="MultiplayerSpawner"]
+_spawnable_scenes = PackedStringArray("res://bullet.tscn")
+spawn_path = NodePath("../../Players")
+spawn_limit = 50
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("PlaneMesh_qjl3s")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_81hdx")
+
+[node name="Spectator" type="Camera3D" parent="."]
+transform = Transform3D(0.82266, -0.525816, 0.216213, 0, 0.380299, 0.924864, -0.568534, -0.760848, 0.312857, 5.92268, 26.8013, 9.24524)
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="UI/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="UI/HBoxContainer/ColorRect"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect2" type="ColorRect" parent="UI/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+color = Color(0, 0, 1, 1)
+
+[node name="Button2" type="Button" parent="UI/HBoxContainer/ColorRect2"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+offset_right = 50.0
+offset_bottom = 50.0
+
+[connection signal="button_down" from="UI/HBoxContainer/ColorRect/Button" to="." method="select_1"]
+[connection signal="button_down" from="UI/HBoxContainer/ColorRect2/Button2" to="." method="select_2"]
