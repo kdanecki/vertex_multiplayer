@@ -45,6 +45,11 @@ func select_2():
 	rpc_id(1, "add_player", multiplayer.get_unique_id(), "res://player2.tscn")
 	$UI.hide()
 	pass
+	
+func select_POLE_LAYER():
+	rpc_id(1, "add_player", multiplayer.get_unique_id(), "res://pole_layer.tscn")
+	$UI.hide()
+	pass
 #@rpc("authority", "reliable")
 #func spawn_character(id : int, new_position):
 #	var character = preload("res://player.tscn").instantiate()

@@ -15,11 +15,11 @@ sky = SubResource("Sky_mcjvc")
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_qjl3s"]
-size = Vector2(10, 10)
+[sub_resource type="BoxMesh" id="BoxMesh_5jsw3"]
+size = Vector3(10, 1, 10)
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_81hdx"]
-points = PackedVector3Array(5.07738, 0.079334, 5.07738, -5.07738, -0.079334, -5.07738, -5.07738, 0.079334, -5.07738, 5.07738, -0.079334, -5.07738, -5.07738, -0.079334, 5.07738, -5.07738, 0.079334, 5.07738, 5.07738, 0.079334, -5.07738, 5.07738, -0.079334, 5.07738)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_hj28i"]
+points = PackedVector3Array(-5, -0.5, -5, -5, 0.5, -5, 5, -0.5, -5, -5, -0.5, 5, -5, 0.5, 5, 5, 0.5, -5, 5, -0.5, 5, 5, 0.5, 5)
 
 [node name="Level" type="Node3D"]
 script = ExtResource("1_7h7l2")
@@ -46,11 +46,13 @@ spawn_limit = 50
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
-mesh = SubResource("PlaneMesh_qjl3s")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+mesh = SubResource("BoxMesh_5jsw3")
 skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-shape = SubResource("ConvexPolygonShape3D_81hdx")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("ConvexPolygonShape3D_hj28i")
 
 [node name="Spectator" type="Camera3D" parent="."]
 transform = Transform3D(0.82266, -0.525816, 0.216213, 0, 0.380299, 0.924864, -0.568534, -0.760848, 0.312857, 5.92268, 26.8013, 9.24524)
@@ -98,5 +100,32 @@ layout_mode = 2
 offset_right = 50.0
 offset_bottom = 50.0
 
+[node name="ColorRect3" type="ColorRect" parent="UI/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRectPOLE" type="ColorRect" parent="UI/HBoxContainer/ColorRect3"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -25.0
+offset_right = 5.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button_pole_layer" type="Button" parent="UI/HBoxContainer/ColorRect3"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+offset_right = 50.0
+offset_bottom = 50.0
+flat = true
+
 [connection signal="button_down" from="UI/HBoxContainer/ColorRect/Button" to="." method="select_1"]
 [connection signal="button_down" from="UI/HBoxContainer/ColorRect2/Button2" to="." method="select_2"]
+[connection signal="button_down" from="UI/HBoxContainer/ColorRect3/Button_pole_layer" to="." method="select_POLE_LAYER"]
